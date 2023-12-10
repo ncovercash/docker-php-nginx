@@ -1,2 +1,3 @@
 # docker-php-nginx
-PHP + Nginx + Docker = tada
+
+An extension of https://github.com/TrafeX/docker-php-nginx/ with a few bonus features I find useful.
