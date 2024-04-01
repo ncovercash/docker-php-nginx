@@ -10,12 +10,14 @@ FROM trafex/php-nginx:3.5.0 AS base
   RUN chmod +x /healthcheck.sh
 
   # support cron
-  RUN sed -i '/command=/a user=nobody' /etc/supervisor/conf.d/supervisord.conf
-  #RUN sed -i '/nodaemon=/a user=nobody' /etc/supervisor/conf.d/supervisord.conf
+  
+  RUN apk add --no-cache dcron libcap
+  
+  RUN chown nobody:nobody /usr/sbin/crond \
+    && setcap cap_setgid=ep /usr/sbin/crond
 
-  RUN echo -e "\n[program:crond]\ncommand=crond -f -d 8\nstdout_logfile=/dev/stdout\nstdout_logfile_maxbytes=0\nstderr_logfile=/dev/stderr\nstderr_logfile_maxbytes=0" >> /etc/supervisor/conf.d/supervisord.conf
+  RUN echo -e "\n[program:crond]\ncommand=/usr/sbin/crond -f -L /dev/stdout\nstdout_logfile=/dev/stdout\nstdout_logfile_maxbytes=0\nstderr_logfile=/dev/stderr\nstderr_logfile_maxbytes=0" >> /etc/supervisor/conf.d/supervisord.conf
 
-  # We intentionally do NOT do this; supervisord will handle running as nobody
-  # USER nobody
+  USER nobody
 
   HEALTHCHECK --timeout=1s --interval=10s --retries=0 --start-period=30s CMD /healthcheck.sh
