@@ -2,6 +2,9 @@ FROM trafex/php-nginx:3.5.0 AS base
 
   USER root
 
+  # clean slate
+  RUN rm /var/www/html/*
+
   # for healthcheck
   RUN apk add --no-cache curl
 
@@ -10,7 +13,6 @@ FROM trafex/php-nginx:3.5.0 AS base
   RUN chmod +x /healthcheck.sh
 
   # support cron
-  
   RUN apk add --no-cache dcron libcap
   
   RUN chown nobody:nobody /usr/sbin/crond \
