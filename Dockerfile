@@ -11,7 +11,7 @@ FROM trafex/php-nginx:3.5.0 AS base
 
   # support cron
   RUN sed -i '/command=/a user=nobody' /etc/supervisor/conf.d/supervisord.conf
-  RUN sed -i '/nodaemon=/a user=nobody' /etc/supervisor/conf.d/supervisord.conf
+  #RUN sed -i '/nodaemon=/a user=nobody' /etc/supervisor/conf.d/supervisord.conf
 
   RUN echo -e "\n[program:crond]\ncommand=crond -f -d 8\nstdout_logfile=/dev/stdout\nstdout_logfile_maxbytes=0\nstderr_logfile=/dev/stderr\nstderr_logfile_maxbytes=0" >> /etc/supervisor/conf.d/supervisord.conf
 
