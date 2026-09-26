@@ -19,6 +19,7 @@ FROM trafex/php-nginx:3.11.1 AS base
     && setcap cap_setgid=ep /usr/sbin/crond
 
   RUN echo -e "\n[program:crond]\ncommand=/usr/sbin/crond -f -L /dev/stdout\nstdout_logfile=/dev/stdout\nstdout_logfile_maxbytes=0\nstderr_logfile=/dev/stderr\nstderr_logfile_maxbytes=0" >> /etc/supervisor/conf.d/supervisord.conf
+  RUN echo -e "\nerror_log = syslog" >> /etc//php85/php-fpm.conf
 
   USER nobody
 
